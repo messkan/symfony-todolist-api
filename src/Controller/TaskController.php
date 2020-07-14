@@ -71,7 +71,7 @@ class TaskController extends AbstractController
 
     /**
      * @return JsonResponse
-     * @Route("/{id}", name="" , methods={"DELETE"})
+     * @Route("/delete/{id}", name="" , methods={"DELETE"})
      */
     public function deleteTask(String $id, DocumentManager $dm ){
           try{
@@ -106,4 +106,20 @@ class TaskController extends AbstractController
             return new JsonResponse($th->getMessage() , Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * @return JsonResponse
+     * @Route("/clear" , name="clearCompleted" , methods={"DELETE"})
+     */
+    public function deleteCompleted(DocumentManager $dm){
+        try {
+            $tasksCollection = $dm->getDocumentCollection(Task::class);
+            $tasksCollection->deleteMany(array('complete' => true));
+            return new JsonResponse(array('deleted'), Response::HTTP_OK);
+        }catch (\Throwable $th)
+        {
+            return new JsonResponse($th->getMessage() , Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
