@@ -21,11 +21,25 @@ class Task implements  \JsonSerializable
      */
     protected String $content;
 
+    /**
+     * @MongoDB\Field(type="boolean")
+     */
+    protected Boolean $complete;
+
 
     /**
      * @MongoDB\Field(type="date")
      */
     protected DateTime $creationDate;
+
+    /**
+     * Task constructor.
+     */
+    public function __construct()
+    {
+        $this->complete = false;
+    }
+
 
     /**
      * @return mixed
