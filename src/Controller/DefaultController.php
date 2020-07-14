@@ -27,9 +27,9 @@ class DefaultController extends  AbstractController
 
     /**
      * @return JsonResponse
-     * @Route("/addingTask", name="addingTask" , methods={"GET"})
+     * @Route("/addingTask", name="addingTask" , methods={"GET" , "POST"})
      */
-    public function addingTask(DocumentManager $dm){
+    public function addingTask(DocumentManager $dm, Request $request){
         try{
             /**
              * @var Task task
@@ -41,10 +41,10 @@ class DefaultController extends  AbstractController
             $dm->persist($task);
             $dm->flush();
 
-            return new JsonResponse(array("done" => "true"));
+       //  $body = json_decode($request->getContent(), true);
+         return new JsonResponse(array('ok' => 'ok'));
         }catch (\Exception $err) {
             return new JsonResponse($err);
         }
-
     }
 }

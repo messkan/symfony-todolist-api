@@ -3,27 +3,29 @@
 
 namespace App\Document;
 
+use DateTime;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 /**
  * @MongoDB\Document
+ * @MongoDB\HasLifecycleCallbacks
  */
 class Task implements  \JsonSerializable
 {
     /**
      * @MongoDB\Id
      */
-    protected $id;
+    protected String $id;
 
     /**
      * @MongoDB\Field(type="string")
      */
-    protected $content;
+    protected String $content;
 
 
     /**
      * @MongoDB\Field(type="date")
      */
-    protected  $creation_date;
+    protected DateTime $creationDate;
 
     /**
      * @return mixed
@@ -44,7 +46,7 @@ class Task implements  \JsonSerializable
     /**
      * @return mixed
      */
-    public function getContent()
+    public function getContent() : String
     {
         return $this->content;
     }
@@ -52,7 +54,7 @@ class Task implements  \JsonSerializable
     /**
      * @param mixed $content
      */
-    public function setContent($content)
+    public function setContent($content) : void
     {
         $this->content = $content;
     }
@@ -60,17 +62,18 @@ class Task implements  \JsonSerializable
     /**
      * @return mixed
      */
-    public function getCreationDate()
+    public function getCreationDate() : \DateTime
     {
-        return $this->creation_date;
+        return $this->creationDate;
     }
 
     /**
-     * @param mixed $creation_date
+     * @param $creationDate
+     * @MongoDB\PrePersist
      */
-    public function setCreationDate($creation_date): void
+    public function setCreationDate(): void
     {
-        $this->creation_date = $creation_date;
+        $this->creationDate = new DateTime('now');
     }
 
 
@@ -81,4 +84,6 @@ class Task implements  \JsonSerializable
           "content" => $this->getContent(),
           ];
     }
+
+
 }
