@@ -3,6 +3,7 @@
 
 namespace App\Document;
 
+use Cassandra\Exception\ValidationException;
 use DateTime;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 /**
@@ -24,7 +25,7 @@ class Task implements  \JsonSerializable
     /**
      * @MongoDB\Field(type="boolean")
      */
-    protected Boolean $complete;
+    protected bool $complete;
 
 
     /**
@@ -96,8 +97,39 @@ class Task implements  \JsonSerializable
       return [
           "id" => $this->getId(),
           "content" => $this->getContent(),
+          "complete" => $this->isComplete(),
+          "creationDate" => $this->getCreationDate()
           ];
     }
+
+    /**
+     * @MongoDB\PrePersist
+     */
+    public function validate() : void {
+        if(empty($this->getContent())){
+            throw new \Error("Content cannot be empty");
+        }
+
+    }
+
+    /**
+     * @return bool
+     */
+    public function isComplete(): bool
+    {
+        return $this->complete;
+    }
+
+    /**
+     * @param bool $complete
+     */
+    public function setComplete(bool $complete): void
+    {
+        $this->complete = $complete;
+    }
+
+
+
 
 
 }

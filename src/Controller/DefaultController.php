@@ -7,6 +7,7 @@ use App\Document\Task;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 /**
@@ -36,15 +37,15 @@ class DefaultController extends  AbstractController
              */
             $task = new Task();
 
-            $task->setContent("the first document persisted");
+            $task->setContent("");
 
             $dm->persist($task);
             $dm->flush();
 
        //  $body = json_decode($request->getContent(), true);
          return new JsonResponse(array('ok' => 'ok'));
-        }catch (\Exception $err) {
-            return new JsonResponse($err);
+        }catch (\Throwable $th){
+            return new JsonResponse($th->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
