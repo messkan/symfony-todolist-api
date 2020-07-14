@@ -1,4 +1,90 @@
 {
+    "alcaeus/mongo-php-adapter": {
+        "version": "1.1.11"
+    },
+    "composer/package-versions-deprecated": {
+        "version": "1.8.2"
+    },
+    "doctrine/annotations": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "a2759dd6123694c8d901d0ec80006e044c2e6457"
+        },
+        "files": [
+            "config/routes/annotations.yaml"
+        ]
+    },
+    "doctrine/cache": {
+        "version": "1.10.2"
+    },
+    "doctrine/collections": {
+        "version": "1.6.6"
+    },
+    "doctrine/event-manager": {
+        "version": "1.1.0"
+    },
+    "doctrine/instantiator": {
+        "version": "1.3.1"
+    },
+    "doctrine/lexer": {
+        "version": "1.2.1"
+    },
+    "doctrine/mongodb-odm": {
+        "version": "2.1.2"
+    },
+    "doctrine/mongodb-odm-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "1fd8598bf42227a1c8905edd32f640e4c5d15eff"
+        },
+        "files": [
+            "config/packages/doctrine_mongodb.yaml",
+            "config/packages/prod/doctrine_mongodb.yaml",
+            "src/Document/.gitignore"
+        ]
+    },
+    "doctrine/persistence": {
+        "version": "1.3.7"
+    },
+    "doctrine/reflection": {
+        "version": "1.2.1"
+    },
+    "jean85/pretty-package-versions": {
+        "version": "1.5.0"
+    },
+    "laminas/laminas-code": {
+        "version": "3.4.1"
+    },
+    "laminas/laminas-eventmanager": {
+        "version": "3.2.1"
+    },
+    "laminas/laminas-zendframework-bridge": {
+        "version": "1.0.4"
+    },
+    "mongodb/mongodb": {
+        "version": "1.5.2"
+    },
+    "nelmio/cors-bundle": {
+        "version": "1.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.5",
+            "ref": "6388de23860284db9acce0a7a5d9d13153bcb571"
+        },
+        "files": [
+            "config/packages/nelmio_cors.yaml"
+        ]
+    },
+    "ocramius/proxy-manager": {
+        "version": "2.8.1"
+    },
     "php": {
         "version": "7.4"
     },
@@ -37,6 +123,9 @@
         "version": "v4.4.10"
     },
     "symfony/dependency-injection": {
+        "version": "v4.4.10"
+    },
+    "symfony/doctrine-bridge": {
         "version": "v4.4.10"
     },
     "symfony/dotenv": {
@@ -98,6 +187,9 @@
     "symfony/mime": {
         "version": "v4.4.10"
     },
+    "symfony/options-resolver": {
+        "version": "v4.4.10"
+    },
     "symfony/polyfill-intl-idn": {
         "version": "v1.17.1"
     },
@@ -112,6 +204,9 @@
     },
     "symfony/polyfill-php80": {
         "version": "v1.17.1"
+    },
+    "symfony/process": {
+        "version": "v4.4.10"
     },
     "symfony/routing": {
         "version": "4.2",
@@ -136,7 +231,19 @@
     "symfony/var-exporter": {
         "version": "v4.4.10"
     },
+    "symfony/web-server-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "dae9b39fd6717970be7601101ce5aa960bf53d9a"
+        }
+    },
     "symfony/yaml": {
         "version": "v4.4.10"
+    },
+    "webimpress/safe-writer": {
+        "version": "2.0.1"
     }
 }
