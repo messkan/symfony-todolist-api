@@ -46,7 +46,25 @@ class TaskManager
         return $this->getTaskRepository()->find($id);
     }
 
+    /**
+     * @param $id
+     * @return array|bool
+     */
+    public function remove($id){
+        try{
+            $task = $this->getById($id);
+            if(!$task)
+                return false;
 
-
+            $this->dm->remove($task);
+            $this->dm->flush();
+            return true;
+        }catch(\Throwable $th){
+          return [
+              'error' => true ,
+              'message' => $th->getMessage()
+              ] ;
+        }
+    }
 
 }
