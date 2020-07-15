@@ -39,7 +39,7 @@ class TaskService
 
     /**
      * @param $data
-     * @return string
+     * @return array
      * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function create($data){
@@ -48,9 +48,9 @@ class TaskService
        $created = $this->taskManager->create($task);
 
         if (isset($created['error']) === true) {
-            return $this->serializer->serialize(["error" => true, 'message' => $created['message']] , 'json');
+            return ["error" => true, 'message' => $created['message']];
         } else {
-            return $this->serializer->serialize(["error" => false, 'created' => $created] , 'json');
+            return  ["error" => false, 'created' => $created];
         }
     }
 
@@ -58,15 +58,23 @@ class TaskService
      * @param $id
      */
     public function update($id){
-     return   $this->taskManager->updateCompleteField($id);
+
+     $updated =  $this->taskManager->updateCompleteField($id);
+
+
+     if (isset($updated['error']) === true) {
+            return ["error" => true, 'message' => $updated['message']];
+        } else {
+            return ["error" => false, 'updated' => $updated];
+        }
+
     }
 
     /**
      * @return object[]
      */
     public function findAll(){
-         $tasks = $this->taskManager->findAll();
-        return $this->serializer->serialize($tasks, 'json' , [AbstractNormalizer::IGNORED_ATTRIBUTES => ['creationDate']] );
+        return $this->taskManager->findAll();
     }
 
     /**

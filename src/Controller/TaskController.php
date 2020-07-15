@@ -13,6 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Document\Task;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class TaskController
@@ -21,8 +25,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class TaskController extends AbstractController
 {
-
+    /**
+     * @var TaskService
+     */
     private $taskService;
+
+
+
     /**
      * TaskController constructor.
      */
@@ -37,63 +46,75 @@ class TaskController extends AbstractController
     * @Route("/new", name="newTask" , methods={"POST"})
     */
    public function newTask(Request $request){
-
-      return new Response($this->taskService->create($request->getContent()));
+       $new = $this->taskService->create($request->getContent());
+      if($new['error']){
+          return new Response($new ,Response::HTTP_INTERNAL_SERVER_ERROR);
+      }else{
+          return new Response($new , Response::HTTP_OK);
+      }
 
    }
 
     /**
-     * @return JsonResponse
+     * @return Response
      * @Route("/{id}", name="editTask" , methods={"PUT"})
      */
     public function editTask(String $id){
-       //   return  new Response($this->)
+         $updated = $this->taskService->update($id);
+
+         if($updated['error'])
+         {
+             return  new JsonResponse($updated , Response::HTTP_INTERNAL_SERVER_ERROR);
+         }
+         else{
+
+             return  new JsonResponse($updated, Response::HTTP_OK);
+         }
+
+
     }
 
     /**
      * @return JsonResponse
      * @Route("/delete/{id}", name="" , methods={"DELETE"})
      */
-    public function deleteTask(String $id, DocumentManager $dm ){
-          try{
-              $taskRepo = $dm->getRepository(Task::class);
-              /**
-               * @var Task $task
-               */
-              $task = $taskRepo->find($id);
-              if(!$task)
-                  throw new \Exception('task not found');
-              $dm->remove($task);
-              $dm->flush();
-              return new JsonResponse(array('deleted' => 'deleted'), Response::HTTP_OK);
-          }catch(\Throwable $th){
-              return new JsonResponse($th->getMessage() , Response::HTTP_INTERNAL_SERVER_ERROR);
+    public function deleteTask(String $id){
+
+          $deleted = $this->taskService->remove($id);
+
+          if($deleted['error'])
+          {
+              return new JsonResponse($deleted, Response::HTTP_INTERNAL_SERVER_ERROR);
+
+          }else{
+              return new JsonResponse($deleted, Response::HTTP_OK);
           }
     }
 
     /**
-     * @return JsonResponse
+     * @return Response
      * @Route("/" , name="tasks" , methods={"GET"})
      */
     public function getTasks() {
-        return new Response($this->taskService->findAll());
+        $tasks = $this->taskService->findAll();
+        return new JsonResponse($tasks);
     }
 
     /**
      * @return JsonResponse
      * @Route("/clear" , name="clearCompleted" , methods={"DELETE"})
      */
-    public function deleteCompleted(DocumentManager $dm){
-        try {
-          //  $tasksCollection = $dm->getDocumentCollection(Task::class);
-           // $tasksCollection->deleteMany(array('complete' => true));
-            $removed = $dm->getRepository(Task::class)->removeCompleted();
-            return new JsonResponse(array('removed ' => $removed), Response::HTTP_OK);
+    public function deleteCompleted(){
+        $deleted = $this->taskService->removeCompleted();
 
-        }catch (\Throwable $th)
+        if($deleted['error'])
         {
-            return new JsonResponse($th->getMessage() , Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse($deleted, Response::HTTP_INTERNAL_SERVER_ERROR);
+
+        }else{
+            return new JsonResponse($deleted, Response::HTTP_OK);
         }
     }
+
 
 }

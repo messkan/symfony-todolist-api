@@ -11,7 +11,7 @@ use App\Repository\TaskRepository;
  * @MongoDB\Document(repositoryClass=TaskRepository::class)
  * @MongoDB\HasLifecycleCallbacks
  */
-class Task
+class Task implements  \JsonSerializable
 {
     /**
      * @MongoDB\Id
@@ -92,6 +92,16 @@ class Task
         $this->creationDate = new DateTime('now');
     }
 
+
+    public function jsonSerialize()
+    {
+      return [
+          "id" => $this->getId(),
+          "content" => $this->getContent(),
+          "complete" => $this->isComplete(),
+          "creationDate" => $this->getCreationDate()
+          ];
+    }
 
     /**
      * @MongoDB\PrePersist
