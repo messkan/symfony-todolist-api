@@ -1,0 +1,52 @@
+<?php
+
+
+namespace App\Manager;
+
+
+use App\Document\Task;
+use Doctrine\ODM\MongoDB\DocumentManager;
+
+class TaskManager
+{
+    /**
+     * @var DocumentManager
+     */
+    private $dm ;
+
+    /**
+     * TaskManager constructor.
+     * @param DocumentManager $dm
+     */
+    public function __construct(DocumentManager $dm)
+    {
+        $this->dm = $dm;
+    }
+
+    /**
+     * return Task Repository
+     */
+    public function getTaskRepository(){
+        return $this->dm->getRepository(Task::class);
+    }
+
+    /**
+     * @return object[]
+     *
+     */
+    public function getAll(){
+        return $this->getTaskRepository()->findAll();
+    }
+
+    /**
+     * @param $id
+     * @return object|null
+     */
+    public function getById($id){
+        return $this->getTaskRepository()->find($id);
+    }
+
+
+
+
+}

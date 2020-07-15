@@ -116,6 +116,7 @@ class TaskController extends AbstractController
             $tasksCollection = $dm->getDocumentCollection(Task::class);
             $tasksCollection->deleteMany(array('complete' => true));
             return new JsonResponse(array('deleted'), Response::HTTP_OK);
+
         }catch (\Throwable $th)
         {
             return new JsonResponse($th->getMessage() , Response::HTTP_INTERNAL_SERVER_ERROR);
