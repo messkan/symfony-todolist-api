@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Repository\TaskRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -113,8 +114,9 @@ class TaskController extends AbstractController
      */
     public function deleteCompleted(DocumentManager $dm){
         try {
-            $tasksCollection = $dm->getDocumentCollection(Task::class);
-            $tasksCollection->deleteMany(array('complete' => true));
+          //  $tasksCollection = $dm->getDocumentCollection(Task::class);
+           // $tasksCollection->deleteMany(array('complete' => true));
+            $dm->getRepository(Task::class)->removeCompleted();
             return new JsonResponse(array('deleted'), Response::HTTP_OK);
 
         }catch (\Throwable $th)

@@ -68,5 +68,21 @@ class TaskManager
         }
     }
 
+    /**
+     * @return array|bool
+     */
+    public function removeCompleted(){
+        try{
+           $this->getTaskRepository()->removeCompleted();
+           return true;
+        }catch(\Throwable $th)
+        {
+            return [
+                'error' => true,
+                'message' => $th->getMessage()
+                ];
+        }
+    }
+
 
 }
