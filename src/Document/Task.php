@@ -3,11 +3,12 @@
 
 namespace App\Document;
 
-use Cassandra\Exception\ValidationException;
+
 use DateTime;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use App\Repository\TaskRepository;
 /**
- * @MongoDB\Document
+ * @MongoDB\Document(repositoryClass=TaskRepository::class)
  * @MongoDB\HasLifecycleCallbacks
  */
 class Task implements  \JsonSerializable
