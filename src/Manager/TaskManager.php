@@ -44,6 +44,7 @@ class TaskManager
      */
     public function getById($id){
         return $this->getTaskRepository()->find($id);
+
     }
 
     /**
@@ -66,5 +67,6 @@ class TaskManager
               ] ;
         }
     }
+
 
 }
