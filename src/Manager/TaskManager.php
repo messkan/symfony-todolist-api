@@ -55,7 +55,7 @@ class TaskManager
         try{
             $task = $this->getById($id);
             if(!$task)
-                return false;
+                throw new \Exception('task not found');
 
             $this->dm->remove($task);
             $this->dm->flush();
@@ -75,6 +75,33 @@ class TaskManager
         try{
            $this->getTaskRepository()->removeCompleted();
            return true;
+        }catch(\Throwable $th)
+        {
+            return [
+                'error' => true,
+                'message' => $th->getMessage()
+                ];
+        }
+    }
+
+    /**
+     * @param $id
+     * @return array|bool
+     */
+    public function updateCompleteField($id){
+        try{
+            /**
+             * @var Task $task
+             */
+            $task = $this->getById($id);
+            if(!$task)
+                throw new \Exception('task not found');
+
+            $task->setComplete(!$task->isComplete());
+            $this->dm->persist($task);
+            $this->dm->flush();
+            return true;
+
         }catch(\Throwable $th)
         {
             return [
