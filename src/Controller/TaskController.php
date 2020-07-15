@@ -33,12 +33,12 @@ class TaskController extends AbstractController
 
 
     /**
-    * @return JsonResponse
+    * @return Response
     * @Route("/new", name="newTask" , methods={"POST"})
     */
    public function newTask(Request $request){
 
-       return new Response($this->taskService->create($request->getContent()));
+      return new Response($this->taskService->create($request->getContent()));
 
    }
 

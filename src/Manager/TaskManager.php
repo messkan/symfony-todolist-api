@@ -117,7 +117,7 @@ class TaskManager
         try {
             $this->dm->persist($task);
             $this->dm->flush();
-            return $task;
+            return true;
         }catch (\Throwable $th)
         {
             return [

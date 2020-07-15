@@ -10,6 +10,7 @@ use App\Document\Task;
 use App\Manager\TaskManager;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 class TaskService
@@ -38,16 +39,18 @@ class TaskService
 
     /**
      * @param $data
-     * @return array|bool[]
+     * @return string
      * @throws \Doctrine\ODM\MongoDB\MongoDBException
      */
     public function create($data){
        $task = $this->serializer->deserialize($data , Task::class , 'json');
+
        $created = $this->taskManager->create($task);
+
         if (isset($created['error']) === true) {
-            return ["error" => true, 'message' => $created['message']];
+            return $this->serializer->serialize(["error" => true, 'message' => $created['message']] , 'json');
         } else {
-            return ["error" => false, 'created' => $created];
+            return $this->serializer->serialize(["error" => false, 'created' => $created] , 'json');
         }
     }
 
@@ -55,7 +58,7 @@ class TaskService
      * @param $id
      */
     public function update($id){
-        $this->taskManager->updateCompleteField($id);
+     return   $this->taskManager->updateCompleteField($id);
     }
 
     /**
@@ -63,7 +66,7 @@ class TaskService
      */
     public function findAll(){
          $tasks = $this->taskManager->findAll();
-        return $this->serializer->serialize($tasks, 'json' );
+        return $this->serializer->serialize($tasks, 'json' , [AbstractNormalizer::IGNORED_ATTRIBUTES => ['creationDate']] );
     }
 
     /**
