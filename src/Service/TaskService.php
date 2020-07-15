@@ -62,7 +62,8 @@ class TaskService
      * @return object[]
      */
     public function findAll(){
-        return $this->taskManager->findAll();
+         $tasks = $this->taskManager->findAll();
+        return $this->serializer->serialize($tasks, 'json' );
     }
 
     /**

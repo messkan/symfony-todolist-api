@@ -35,7 +35,7 @@ class TaskManager
      *
      */
     public function findAll(){
-        return $this->getTaskRepository()->findAll();
+        return  $this->getTaskRepository()->findAll();
     }
 
     /**

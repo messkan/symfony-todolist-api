@@ -5,6 +5,7 @@ namespace App\Controller;
 
 
 use App\Repository\TaskRepository;
+use App\Service\TaskService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,9 +25,9 @@ class TaskController extends AbstractController
     * @return JsonResponse
     * @Route("/new", name="newTask" , methods={"POST"})
     */
-   public function newTask(Request $request, DocumentManager $dm ){
+   public function newTask(Request $request, DocumentManager $dm , TaskService $taskService){
 
-       try {
+    try {
 
          $data = json_decode($request->getContent());
            /**
@@ -95,17 +96,8 @@ class TaskController extends AbstractController
      * @return JsonResponse
      * @Route("/" , name="tasks" , methods={"GET"})
      */
-    public function getTasks(DocumentManager $dm) {
-        try{
-            $taskRepo = $dm->getRepository(Task::class);
-            /**
-             * @var Task $task
-             */
-            $tasks = $taskRepo->findAll();
-            return new JsonResponse($tasks, Response::HTTP_OK);
-        }catch(\Throwable $th){
-            return new JsonResponse($th->getMessage() , Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+    public function getTasks(TaskService $taskService) {
+        return new Response($taskService->findAll());
     }
 
     /**
