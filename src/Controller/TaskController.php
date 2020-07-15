@@ -116,8 +116,8 @@ class TaskController extends AbstractController
         try {
           //  $tasksCollection = $dm->getDocumentCollection(Task::class);
            // $tasksCollection->deleteMany(array('complete' => true));
-            $dm->getRepository(Task::class)->removeCompleted();
-            return new JsonResponse(array('deleted'), Response::HTTP_OK);
+            $removed = $dm->getRepository(Task::class)->removeCompleted();
+            return new JsonResponse(array('removed ' => $removed), Response::HTTP_OK);
 
         }catch (\Throwable $th)
         {

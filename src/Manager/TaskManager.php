@@ -34,7 +34,7 @@ class TaskManager
      * @return object[]
      *
      */
-    public function getAll(){
+    public function findAll(){
         return $this->getTaskRepository()->findAll();
     }
 
@@ -44,7 +44,6 @@ class TaskManager
      */
     public function getById($id){
         return $this->getTaskRepository()->find($id);
-
     }
 
     /**
@@ -56,7 +55,6 @@ class TaskManager
             $task = $this->getById($id);
             if(!$task)
                 throw new \Exception('task not found');
-
             $this->dm->remove($task);
             $this->dm->flush();
             return true;
@@ -109,6 +107,25 @@ class TaskManager
                 'message' => $th->getMessage()
                 ];
         }
+    }
+
+    /**
+     * @param $task
+     * @throws \Doctrine\ODM\MongoDB\MongoDBException
+     */
+    public function create($task){
+        try {
+            $this->dm->persist($task);
+            $this->dm->flush();
+            return $task;
+        }catch (\Throwable $th)
+        {
+            return [
+                'error' => true,
+                'message' => $th->getMessage()
+            ];
+        }
+
     }
 
 
