@@ -21,31 +21,24 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class TaskController extends AbstractController
 {
-   /**
+
+    private $taskService;
+    /**
+     * TaskController constructor.
+     */
+    public function __construct(TaskService $taskService)
+    {
+        $this->taskService = $taskService;
+    }
+
+
+    /**
     * @return JsonResponse
     * @Route("/new", name="newTask" , methods={"POST"})
     */
-   public function newTask(Request $request, DocumentManager $dm , TaskService $taskService){
+   public function newTask(Request $request){
 
-    try {
-
-         $data = json_decode($request->getContent());
-           /**
-            * @var Task $task
-            */
-          $task = new Task();
-
-
-           $task->setContent($data->content);
-           $task->setComplete(0);
-           $dm->persist($task);
-           $dm->flush();
-
-           return new JsonResponse($task, Response::HTTP_OK);
-
-       }catch(\Throwable $exception){
-           return new JsonResponse($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-       }
+       return new Response($this->taskService->create($request->getContent()));
 
    }
 
@@ -53,22 +46,8 @@ class TaskController extends AbstractController
      * @return JsonResponse
      * @Route("/{id}", name="editTask" , methods={"PUT"})
      */
-    public function editTask(String $id, DocumentManager $dm){
-          try{
-              $taskRepo = $dm->getRepository(Task::class);
-              /**
-               * @var Task $task
-               */
-              $task = $taskRepo->find($id);
-              if(!$task)
-                  throw new \Exception('task not found');
-              $task->setComplete(!$task->isComplete());
-              $dm->persist($task);
-              $dm->flush();
-              return new JsonResponse($task, Response::HTTP_OK);
-          }catch (\Throwable $th){
-              return new JsonResponse($th->getMessage() , Response::HTTP_INTERNAL_SERVER_ERROR);
-          }
+    public function editTask(String $id){
+       //   return  new Response($this->)
     }
 
     /**
@@ -96,8 +75,8 @@ class TaskController extends AbstractController
      * @return JsonResponse
      * @Route("/" , name="tasks" , methods={"GET"})
      */
-    public function getTasks(TaskService $taskService) {
-        return new Response($taskService->findAll());
+    public function getTasks() {
+        return new Response($this->taskService->findAll());
     }
 
     /**
